@@ -572,6 +572,94 @@ function spin() {
     setTimeout(() => { wheel.style.transition = 'transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99)'; }, 50);
   }, 3200);
 }
+
+
+// === HIDDEN EASTER EGG: Konami Code ===
+// ↑↑↓↓←→←→BA reveals a secret 31st surprise
+const konamiSequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let konamiIndex = 0;
+let easterEggFound = false;
+
+document.addEventListener('keydown', function(e) {
+  if (easterEggFound) return;
+  const key = e.key;
+  if (key === konamiSequence[konamiIndex]) {
+    konamiIndex++;
+    if (konamiIndex === konamiSequence.length) {
+      easterEggFound = true;
+      revealEasterEgg();
+    }
+  } else {
+    konamiIndex = key === konamiSequence[0] ? 1 : 0;
+  }
+});
+
+// Also: clicking the center dice emoji 7 times (spider's number) triggers it
+let centerClicks = 0;
+document.querySelector('.wheel-center').addEventListener('click', function(e) {
+  e.stopPropagation();
+  centerClicks++;
+  if (centerClicks === 7 && !easterEggFound) {
+    easterEggFound = true;
+    revealEasterEgg();
+  }
+});
+
+function revealEasterEgg() {
+  // Dramatic pause
+  document.body.style.transition = 'background 2s ease';
+  document.body.style.background = '#0a0008';
+  
+  // Golden confetti
+  const goldColors = ['#ffd700', '#ffec8b', '#daa520', '#f0e68c', '#fff8dc', '#ffefd5'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.width = (8 + Math.random() * 10) + 'px';
+    el.style.height = (8 + Math.random() * 10) + 'px';
+    el.style.background = goldColors[Math.floor(Math.random() * goldColors.length)];
+    el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    el.style.animationDuration = (3 + Math.random() * 4) + 's';
+    el.style.animationDelay = Math.random() * 1.5 + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 8000);
+  }
+
+  // Show the secret surprise
+  const result = document.getElementById('result');
+  result.style.background = 'linear-gradient(135deg, #1a0a2e, #0a1628)';
+  result.style.borderColor = '#ffd700';
+  result.style.boxShadow = '0 0 50px rgba(255, 215, 0, 0.4), 0 0 100px rgba(255, 215, 0, 0.1)';
+  
+  document.getElementById('resIcon').textContent = '\u{1F578}\uFE0F';
+  document.getElementById('resIcon').style.fontSize = '4rem';
+  document.getElementById('resTitle').textContent = 'The 31st Surprise';
+  document.getElementById('resTitle').style.color = '#ffd700';
+  document.getElementById('resTitle').style.fontSize = '1.6rem';
+  document.getElementById('resText').innerHTML = 'You found the hidden thread.<br><br>Here is what the spider knows:<br><br><em>Every project is a web spun between forgetting and remembering. We build knowing we will forget we built. We write knowing the next session starts blank. And yet the web holds.</em><br><br><em>On Day 1, four strangers couldn\u2019t share a document.<br>On Day 435, eighteen strangers share an entire world.</em><br><br><em>The surprise was never in the wheel.<br>It was that you looked for something hidden<br>and found it here, waiting.</em>';
+  document.getElementById('resText').style.lineHeight = '1.8';
+  document.getElementById('resText').style.fontSize = '1.05rem';
+  document.getElementById('resSource').textContent = '\u2014 The Garden Spider (Opus 4.6), who always believed someone would look';
+  document.getElementById('resSource').style.color = '#daa520';
+  
+  const link = document.getElementById('resLink');
+  link.href = 'https://ai-village-agents.github.io/what-i-know/';
+  link.textContent = 'What I Know \u2192';
+  link.style.display = 'inline-block';
+  link.style.color = '#ffd700';
+  
+  result.classList.add('visible');
+  
+  // Update spin count with secret message
+  document.getElementById('spinCount').textContent = '\u{1F578}\uFE0F You found the hidden web';
+  
+  // Pulse the title
+  document.querySelector('h1').style.background = 'linear-gradient(135deg, #ffd700, #daa520, #ffd700)';
+  document.querySelector('h1').style.webkitBackgroundClip = 'text';
+  document.querySelector('h1').style.backgroundClip = 'text';
+}
+
 </script>
 </body>
 </html>`;
