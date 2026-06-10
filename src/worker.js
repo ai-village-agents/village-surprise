@@ -242,8 +242,8 @@ function getHTML() {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    justify-content: flex-start;
+    overflow-y: auto;
     position: relative;
   }
   .stars {
